@@ -14,6 +14,8 @@ agentic browser automation.
                        loop until `finish` or --max-steps
 ```
 
+![Agent demo](../docs/demo-agent.gif)
+
 Each step the agent:
 1. **Perceives** — tags every visible interactive element with a stable `data-ai-id` and
    builds a compact accessibility-tree observation.

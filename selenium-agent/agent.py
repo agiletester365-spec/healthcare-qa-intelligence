@@ -224,7 +224,7 @@ def execute(driver: webdriver.Chrome, state: AgentState, step: Step) -> bool:
 
 # --- Loop -------------------------------------------------------------------------------
 
-def run(goal: str, url: str, max_steps: int, headed: bool) -> int:
+def run(goal: str, url: str, max_steps: int, headed: bool, record_dir: str | None = None) -> int:
     opts = Options()
     if not headed:
         opts.add_argument("--headless=new")
@@ -233,12 +233,23 @@ def run(goal: str, url: str, max_steps: int, headed: bool) -> int:
     driver = webdriver.Chrome(options=opts)
     state = AgentState(goal=goal, base_origin=f"{urlparse(url).scheme}://{urlparse(url).netloc}")
 
+    frames = 0
+    if record_dir:
+        os.makedirs(record_dir, exist_ok=True)
+
+    def snap() -> None:
+        nonlocal frames
+        if record_dir:
+            driver.save_screenshot(os.path.join(record_dir, f"frame_{frames:03d}.png"))
+            frames += 1
+
     mode = "Claude" if ai_enabled() else "heuristic (no API key)"
     print(f"🤖 Selenium AI agent — mode: {mode}")
     print(f"🎯 Goal: {goal}\n")
 
     try:
         driver.get(url)
+        snap()  # initial page
         for n in range(1, max_steps + 1):
             elements = driver.execute_script(ANNOTATE_JS)
             current = driver.current_url
@@ -246,7 +257,9 @@ def run(goal: str, url: str, max_steps: int, headed: bool) -> int:
             step = decide(state, current, elements)
             print(f"[step {n}] {step.action} target={step.target} "
                   f"value={'***' if step.action == 'type' else step.value} — {step.reason}")
-            if execute(driver, state, step):
+            done = execute(driver, state, step)
+            snap()  # capture the result of this action
+            if done:
                 print(f"\n✅ Agent finished in {n} step(s): {step.reason}")
                 return 0
         print(f"\n⏹️  Stopped after max {max_steps} steps without an explicit finish.")
@@ -261,9 +274,10 @@ def main() -> int:
     p.add_argument("--url", default=DEFAULT_URL, help=f"Starting URL (default: {DEFAULT_URL})")
     p.add_argument("--max-steps", type=int, default=15, help="Safety cap on loop iterations")
     p.add_argument("--headed", action="store_true", help="Show the browser window")
+    p.add_argument("--record", metavar="DIR", help="Save a screenshot per step into DIR (for demos)")
     args = p.parse_args()
     try:
-        return run(args.goal, args.url, args.max_steps, args.headed)
+        return run(args.goal, args.url, args.max_steps, args.headed, args.record)
     except Exception as exc:  # noqa: BLE001 - surface a clean message to the CLI
         print(f"❌ {type(exc).__name__}: {exc}", file=sys.stderr)
         return 2

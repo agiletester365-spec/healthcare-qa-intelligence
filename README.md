@@ -137,6 +137,11 @@ action, executes it with Selenium, and repeats until the goal is met — with sa
 max-step guards ([ADR 0006](docs/adr/0006-agent-safety-guards.md)) and a heuristic fallback
 that runs without a key.
 
+![Selenium agent completing "log in and request a prescription refill"](docs/demo-agent.gif)
+
+*The agent autonomously logs in, navigates to prescriptions, and requests a refill — each
+frame is a real step it decided and executed (recorded with `--record`).*
+
 ```bash
 npm run mock &        # portal on :4300
 cd selenium-agent && pip install -r requirements.txt
