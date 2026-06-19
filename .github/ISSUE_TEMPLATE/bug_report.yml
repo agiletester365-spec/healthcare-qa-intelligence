@@ -1,0 +1,39 @@
+name: Bug report
+description: A test, the mock app, or the agent behaves incorrectly
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you observe vs. expect?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Playwright suite, Cypress suite, shared engine, mock app, selenium-agent, docs/CI]
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. npm run mock
+        2. npx playwright test ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: OS, Node version, browser, AI mode (key set or not)
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / trace
+      description: Paste relevant output, or attach the Playwright trace / Cypress screenshot.
+      render: shell
