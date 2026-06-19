@@ -16,14 +16,12 @@ Fly.io, Render, Cloud Run, ECS).
 
 ## CI
 
-A ready-to-enable pipeline lives at `docs/ci-workflow.example.yml`:
+CI runs on every push and PR via [`.github/workflows/ci.yml`](../.github/workflows/ci.yml):
 
 - **Playwright** matrix across chromium / firefox / webkit
 - **Cypress** (boots the mock app via `start-server-and-test`)
 - **typecheck**
 - Uploads HTML reports / failure screenshots as artifacts
-
-Enable it by moving it to `.github/workflows/ci.yml` (requires the `workflow` token scope).
 
 ## Production considerations (if this targeted a real portal)
 

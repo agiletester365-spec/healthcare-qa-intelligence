@@ -5,6 +5,7 @@ Playwright and Cypress** from a shared, framework-agnostic engine — with self-
 locators, accessibility/visual/security gates, synthetic test data, and an autonomous
 Selenium agent.
 
+[![e2e](https://github.com/agiletester365-spec/healthcare-qa-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/agiletester365-spec/healthcare-qa-intelligence/actions/workflows/ci.yml)
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)
 ![Cypress](https://img.shields.io/badge/Cypress-69D3A7?logo=cypress&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
@@ -156,7 +157,8 @@ shared/          AI engine, data factories, security checks — used by both sui
 playwright/      Page objects (self-healing), fixtures, specs
 cypress/         Custom commands (self-healing), specs
 selenium-agent/  Autonomous Selenium AI agent loop (Python)
-docs/            ADRs, test strategy, deployment, limitations, screenshots, CI example
+docs/            ADRs, test strategy, deployment, limitations, screenshots
+.github/         CI (Playwright chromium/firefox/webkit + Cypress + typecheck) + templates
 ```
 
 ## Responsible use

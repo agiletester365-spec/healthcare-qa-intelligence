@@ -5,8 +5,6 @@ this file is the high-level view.
 
 ## Near term
 
-- [ ] **Enable CI** — move `docs/ci-workflow.example.yml` to `.github/workflows/ci.yml`
-      (Playwright on chromium/firefox/webkit + Cypress + typecheck on every PR).
 - [ ] **Unit tests for `shared/`** — vitest coverage for the self-healing resolver, security
       checks, and data factories (the layer E2E exercises only indirectly).
 - [ ] **Lint + format gate** — ESLint + Prettier wired into CI and a pre-commit hook.
@@ -33,6 +31,7 @@ this file is the high-level view.
 
 ## Done
 
+- [x] GitHub Actions CI — Playwright (chromium/firefox/webkit) + Cypress + typecheck on every push/PR.
 - [x] Cypress + Playwright suites for all four workflows (48 specs).
 - [x] Shared self-healing engine across both runners.
 - [x] a11y (axe-core) + visual regression + security baseline.
