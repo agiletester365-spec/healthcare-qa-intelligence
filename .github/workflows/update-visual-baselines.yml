@@ -1,0 +1,27 @@
+name: update-visual-baselines
+
+# Visual baselines are OS-specific (Playwright names them *-chromium-linux.png etc.).
+# CI runs on Linux, so the committed baselines must be generated on Linux too. Run this
+# workflow manually (Actions tab → Run workflow) after an intentional UI change, then
+# download the artifact and commit the updated PNGs.
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Regenerate chromium visual baselines (Linux)
+        run: npx playwright test playwright/tests/visual --project=chromium --update-snapshots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-linux
+          path: playwright/__snapshots__/
+          retention-days: 3

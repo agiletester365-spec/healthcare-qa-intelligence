@@ -1,5 +1,9 @@
 import { defineConfig } from 'cypress';
 
+// Plain ESM config (not .ts): with `"type": "module"` in package.json, a .ts config forces
+// Cypress down the ts-node ESM path, which Node 20's require(esm) loader can't transpile
+// ("Unexpected token ':'" in CI). Keeping the config typeless sidesteps that entirely;
+// specs and support files are still TypeScript and handled by Cypress's spec preprocessor.
 const BASE_URL = process.env.BASE_URL ?? 'http://127.0.0.1:4300';
 
 export default defineConfig({
@@ -15,14 +19,12 @@ export default defineConfig({
     viewportHeight: 800,
     retries: { runMode: 2, openMode: 0 },
     env: {
-      // Surfaced to specs via Cypress.env(...)
       TEST_DATA_SEED: process.env.TEST_DATA_SEED ?? '20260619',
     },
     setupNodeEvents(on) {
-      // Task hook lets specs log self-healing / AI events to the terminal.
+      // Lets specs log self-healing / a11y events to the terminal via cy.task('log', ...).
       on('task', {
-        log(message: string) {
-          // eslint-disable-next-line no-console
+        log(message) {
           console.log(message);
           return null;
         },
